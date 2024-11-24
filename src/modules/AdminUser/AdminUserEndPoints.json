@@ -1,8 +1,0 @@
-{
-    "addAdminUser": "/admin/admin-user/",
-    "updateAdminUser": "/admin/admin-user/",
-    "getPaginatedAdminUserList": "/admin/admin-user/list/paginated",
-    "deleteAdminUser": "/admin/admin-user/",
-    "getAdminUserById": "/admin/admin-user/",
-    "getSelectedAdminUserById": "/admin/admin-user/"
-}

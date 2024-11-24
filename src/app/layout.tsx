@@ -5,14 +5,15 @@ import "./globals.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
-// import "primereact/resources/themes/lara-light-indigo/theme.css";
-// import "../assets/themes/lara-light-teal/theme.css"
-import "../assets/themes/lara-light-cookin/theme.css"
+//import "primereact/resources/themes/lara-dark-blue/theme.css";
+import "../assets/themes/lara-dark-blue/theme.css"
+// import "../assets/themes/lara-light-cookin/theme.css"
 
 import { PrimeReactProvider } from "primereact/api";
 import StoreProvider from "@/store/StoreProvider";
 import ToastProvider from "@/component/general/ToastProvider";
 import { APP_NAME } from "@/utils/constants";
+import Header from "@/component/layout/Header";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -32,7 +33,13 @@ export default function RootLayout({
         <PrimeReactProvider>
           <StoreProvider>
             <ToastProvider>
+              <Header />
+              <div className="flex ">
+            {/* Centered Container */}
+              <div className="flex flex-col justify-center items-center mx-auto w-full max-container   p-4">
               {children}
+              </div>
+              </div>
            </ToastProvider>
           </StoreProvider>
         </PrimeReactProvider>

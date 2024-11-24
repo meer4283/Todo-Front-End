@@ -1,8 +1,0 @@
-{
-    "addDish": "/dish/",
-    "updateDish": "/dish/",
-    "getPaginatedDishList": "/dish/list/paginated",
-    "deleteDish": "/dish/",
-    "getDishById": "/dish/",
-    "getSelectedDishById": "/dish/"
-}

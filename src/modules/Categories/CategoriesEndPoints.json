@@ -1,8 +1,0 @@
-{
-    "addCategories": "/categories/",
-    "updateCategories": "/categories/",
-    "getPaginatedCategoriesList": "/categories/list/paginated",
-    "deleteCategories": "/categories/",
-    "getCategoriesById": "/categories/",
-    "getSelectedCategoriesById": "/categories/"
-}

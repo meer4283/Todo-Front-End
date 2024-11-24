@@ -1,8 +1,0 @@
-{
-    "addCuisine": "/cuisine/",
-    "updateCuisine": "/cuisine/",
-    "getPaginatedCuisineList": "/cuisine/list/paginated",
-    "deleteCuisine": "/cuisine/",
-    "getCuisineById": "/cuisine/",
-    "getSelectedCuisineById": "/cuisine/"
-}

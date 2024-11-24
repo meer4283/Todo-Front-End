@@ -37,3 +37,12 @@
 .builder-element-wrapper .grid div h5 {
   padding-bottom: 20px;
 }
+
+.max-container {
+
+  max-width: 50rem;
+}
+
+.add-container {
+  margin-top: -55px;
+}
