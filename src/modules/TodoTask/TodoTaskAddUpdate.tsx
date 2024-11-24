@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { FormSkeleton } from "@/component/Skeleton/FormSkeleton";
 import { useGlobalHook } from "@/hooks";
 import ColorCircle from "@/component/ColorCircle";
+import { useRouter } from "next/navigation";
 
 type Props = {
   todoTaskId?: number | null,
@@ -14,6 +15,8 @@ type Props = {
 }
 
 const TodoTaskAddUpdate = (props: Props) => {
+  const router = useRouter()
+
   const {
     saveForm,
     updateForm,
@@ -25,7 +28,7 @@ const TodoTaskAddUpdate = (props: Props) => {
   } = useTodoTaskHook();
   const { updateGlobalToast } = useGlobalHook();
   const [isSaveAndExit, setIsSaveAndExit] = useState<boolean>(false);
-  const { todoTaskId = null, setTodoTaskId = () => { },  } = props;
+  const { todoTaskId = null, setTodoTaskId = () => { }, } = props;
   const { t } = useTranslation();
 
   const colors = [
@@ -85,14 +88,22 @@ const TodoTaskAddUpdate = (props: Props) => {
       title: "",
       color: "",
     },
-    validate: validate ,
+    validate: validate,
     onSubmit: (data: any) => {
 
 
       if (todoTaskId) {
-        updateForm(todoTaskId, data, formik.resetForm, isSaveAndExit, ()=>{});
+        updateForm(todoTaskId, data, () => {
+          formik.resetForm()
+          router.back()
+
+        }, isSaveAndExit, () => { });
       } else {
-        saveForm(data, formik.resetForm, isSaveAndExit, ()=>{});
+        saveForm(data, () => {
+          formik.resetForm()
+          router.back()
+
+        }, isSaveAndExit, () => { });
       }
     },
   });
@@ -132,7 +143,7 @@ const TodoTaskAddUpdate = (props: Props) => {
                       value={formik.values.title}
                       onChange={formik.handleChange}
                       placeholder={t("Ex. Brush your teeth")}
-                    
+
                       invalid={isFormFieldValid("title") || false}
                     />
                     {getFormErrorMessage("title")}
@@ -145,10 +156,10 @@ const TodoTaskAddUpdate = (props: Props) => {
                     </label>
                     <div className="flex gap-3">
                       {colors.map((color, index) => (
-                        <ColorCircle key={color} color={color} index={index} selectedColor={formik.values.color}   onClick={() => {
+                        <ColorCircle key={color} color={color} index={index} selectedColor={formik.values.color} onClick={() => {
                           formik.setFieldValue("color", color);
                         }} />
-                        
+
                       ))}
                     </div>
                     {getFormErrorMessage("color")}
@@ -157,25 +168,25 @@ const TodoTaskAddUpdate = (props: Props) => {
               </div>
             </div>
             <div className="w-full ">
-            
 
-                  <Button
-                    type="submit"
-                    label={todoTaskId ? `${'Save'}` : `${'Add Task'}`}
-                    className="p-button p-button-primary w-full text-white"
-                    disabled={TodoTaskSubmit}
-                    loading={TodoTaskSubmit}
-                    onClick={() => {
-                      if (Object.keys(validate(formik.values)).length > 0) {
-                        validationToast();
 
-                      } else {
-                        setIsSaveAndExit(true)
-                      }
-                      formik.handleSubmit();
-                    }}
-                  />
-                
+              <Button
+                type="submit"
+                label={todoTaskId ? `${'Save'}` : `${'Add Task'}`}
+                className="p-button p-button-primary w-full text-white"
+                disabled={TodoTaskSubmit}
+                loading={TodoTaskSubmit}
+                onClick={() => {
+                  if (Object.keys(validate(formik.values)).length > 0) {
+                    validationToast();
+
+                  } else {
+                    setIsSaveAndExit(true)
+                  }
+                  formik.handleSubmit();
+                }}
+              />
+
             </div>
           </form>
         )}
