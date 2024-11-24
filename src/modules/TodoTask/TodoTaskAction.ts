@@ -53,9 +53,9 @@ export function addTodoTaskAction(url: string, formData: object, resetForm: () =
     const db = new useHttp();
     db.post(url, formData)
       .then((res: any) => {
-        const { record } = res.data;
+        const record = res.data;
 
-        if (res.status === 200) {
+        if (res.status === 201) {
 
           resetForm();
           const action: any = {
@@ -141,7 +141,7 @@ export function updateTodoTaskAction(
               type: GLOBAL_TOAST,
               payLoad: {
                 showToast: true,
-                toastMessage: res.data.message,
+                toastMessage: "Task updated",
                 toastDetail: null,
                 toastType: "success",
               },

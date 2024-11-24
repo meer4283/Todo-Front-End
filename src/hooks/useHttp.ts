@@ -15,7 +15,6 @@ class useHttp {
 
     constructor(withCredentials = true) {
         this.withCredentials = withCredentials;
-        console.log("withCredentials", withCredentials);
 
         this.getAccessToken();
         this.api = this.createInstance(withCredentials);

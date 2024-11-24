@@ -1,9 +1,24 @@
-import React from 'react'
+"use client";
+import React from "react";
+import { Button } from "primereact/button";
+import { TodoTaskAddUpdate } from "@/modules/TodoTask";
+import { useRouter } from "next/navigation";
 
-const Page = () => {
-  return (
-    <div>Page</div>
-  )
-}
+const Page = (props:any) => {
+    const router = useRouter()
+    return (
+        <div className="w-full">
+            <div className="mb-4">
+                <Button
+                    icon="pi pi-arrow-left"
+                    className="p-button-text text-white"
+                    onClick={() => router.back()}
+                />
+            </div>
+            
+           <TodoTaskAddUpdate todoTaskId={props?.params?.id} />
+        </div>
+    );
+};
 
-export default Page
+export default Page;

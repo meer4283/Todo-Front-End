@@ -6,6 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { useTranslation } from 'react-i18next';
 import { FormSkeleton } from "@/component/Skeleton/FormSkeleton";
 import { useGlobalHook } from "@/hooks";
+import ColorCircle from "@/component/ColorCircle";
 
 type Props = {
   todoTaskId?: number | null,
@@ -48,14 +49,14 @@ const TodoTaskAddUpdate = (props: Props) => {
           ? getTodoTaskByIdFromStore?.title
           : ""
       );
+      formik.setFieldValue(
+        "color",
+        getTodoTaskByIdFromStore?.color
+          ? getTodoTaskByIdFromStore?.color
+          : ""
+      );
     }
 
-    return () => {
-      if (todoTaskId) {
-        clearTodoTaskDataHook();
-        setTodoTaskId(null);
-      }
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getTodoTaskByIdFromStore]);
 
@@ -68,21 +69,23 @@ const TodoTaskAddUpdate = (props: Props) => {
     });
   };
 
+  const validate = (data: any) => {
+    const errors: any = {};
+    if (!data.title) {
+      errors.title = `${t("Title is required.")}`;
+    }
+    if (!data.color) {
+      errors.color = `${t("Please select a color.")}`;
+    }
+    return errors;
+  }
+
   const formik: any = useFormik({
     initialValues: {
       title: "",
       color: "",
     },
-    validate: (data: any) => {
-      const errors: any = {};
-      if (!data.title) {
-        errors.title = `${t("Title is required.")}`;
-      }
-      if (!data.color) {
-        errors.color = `${t("Please select a color.")}`;
-      }
-      return errors;
-    },
+    validate: validate ,
     onSubmit: (data: any) => {
 
 
@@ -142,14 +145,10 @@ const TodoTaskAddUpdate = (props: Props) => {
                     </label>
                     <div className="flex gap-3">
                       {colors.map((color, index) => (
-                        <div
-                          key={index}
-                          className={`w-3rem h-3rem rounded-full cursor-pointer bg-${color} ${formik.values.color === color ? "border-2 border-white" : ""
-                            }`}
-                          onClick={() => {
-                            formik.setFieldValue("color", color);
-                          }}
-                        ></div>
+                        <ColorCircle key={color} color={color} index={index} selectedColor={formik.values.color}   onClick={() => {
+                          formik.setFieldValue("color", color);
+                        }} />
+                        
                       ))}
                     </div>
                     {getFormErrorMessage("color")}
@@ -160,7 +159,6 @@ const TodoTaskAddUpdate = (props: Props) => {
             <div className="w-full ">
             
 
-                {!todoTaskId &&
                   <Button
                     type="submit"
                     label={todoTaskId ? `${'Save'}` : `${'Add Task'}`}
@@ -168,7 +166,7 @@ const TodoTaskAddUpdate = (props: Props) => {
                     disabled={TodoTaskSubmit}
                     loading={TodoTaskSubmit}
                     onClick={() => {
-                      if (Object.keys(formik.errors).length !== 0) {
+                      if (Object.keys(validate(formik.values)).length > 0) {
                         validationToast();
 
                       } else {
@@ -177,7 +175,7 @@ const TodoTaskAddUpdate = (props: Props) => {
                       formik.handleSubmit();
                     }}
                   />
-                }
+                
             </div>
           </form>
         )}

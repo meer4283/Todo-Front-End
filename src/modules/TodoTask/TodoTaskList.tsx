@@ -10,22 +10,17 @@ import { useTranslation } from 'react-i18next';
 import { Dialog } from "primereact/dialog";
 import { DataTableSkeleton } from "@/component/Skeleton/DataTableSkeleton";
 import { RadioButton } from "primereact/radiobutton";
+import { useRouter } from "next/navigation";
+import ColorCircle from "@/component/ColorCircle";
 
 
 export const TodoTaskList = (props: any) => {
 
   const { deleteForm, clearTodoTaskDataHook, TodoTaskLoading, TodoTaskSubmit, getTodoTaskListFromStore, updateForm } = useTodoTaskHook();
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [showTodoTaskItemViewSidebar, setShowTodoTaskItemViewSidebar] = useState<boolean>(
-    false
-  );
-
-  const [todoTaskId, setTodoTaskId] = useState<any>();
+  const router = useRouter();
   const { t, i18n } = useTranslation();
-  const markComplete = (index: number, todoItem:TodoItem) => {
-    updateForm(todoItem.id, {...todoItem, completed_status: "YES", completed_at:moment().format()}, ()=>{}, false, ()=>{})
+  const markComplete = (index: number, todoItem: TodoItem) => {
+    updateForm(todoItem.id, { ...todoItem, completed_status: "YES", completed_at: moment().format() }, () => { }, false, () => { })
   };
 
   const handleDelete = (index: number) => {
@@ -44,44 +39,10 @@ export const TodoTaskList = (props: any) => {
     });
   };
 
-  const actionBodyTemplate = (row: any) => {
-    return (
-      <>
-        <Button
-          text
-          type="button"
-          className="p-button-info "
-          onClick={() => {
-            setTodoTaskId(row?.id);
-            setShowTodoTaskItemViewSidebar(true);
-          }}
-          icon="pi pi-pencil"
-        ></Button>
 
-        <Button
-          text
-          type="button"
-          className="p-button-info "
-          onClick={() => {
-            setTodoTaskId(row?.id);
-            setShowModal(true);
-          }}
-          icon="pi pi-eye"
-        ></Button>
-
-        <Button
-          text
-          type="button"
-          className="p-button-danger left-space"
-          onClick={() => deleteRowHandler(row)}
-          icon="pi pi-trash"
-        ></Button>
-      </>
-    );
-  };
   return (
     <>
-    <ConfirmDialog />
+      <ConfirmDialog />
       <div className="w-full block">
         {!TodoTaskLoading ? (
           <>
@@ -96,13 +57,18 @@ export const TodoTaskList = (props: any) => {
                 {/* Radio Button & Text */}
                 <div className="flex items-center">
                   {todoItem.completed_status !== "YES" ?
-                    <Button size="large"  text icon="pi pi-circle" className="p-0" onClick={()=>{ markComplete(index, todoItem)}} />
+                    <Button size="large" text  icon="pi pi-circle" className="p-0" onClick={() => { markComplete(index, todoItem) }} />
                     :
-                    <Button size="large" text icon="pi pi-check-circle" className="p-0" />
+
+                    <img src="/image/check.png" width={20}
+                      height={20}
+                       className="m-3"
+                      alt="Picture of the author" />
                   }
+                  <ColorCircle color={todoItem?.color} index={index} selectedColor={""} onClick={() => { }} />
                   <label
                     htmlFor={`todoItem-${index}`}
-                    className={`ml-3 text-sm ${todoItem.completed_status === "YES"
+                    className={`ml-3 text-md ${todoItem.completed_status === "YES"
                       ? "text-gray-400 line-through"
                       : "text-gray-300"
                       }`}
@@ -112,7 +78,11 @@ export const TodoTaskList = (props: any) => {
                 </div>
 
                 {/* Delete Icon */}
-                <Button text icon="pi pi-trash" onClick={()=> deleteRowHandler(todoItem)} />
+                <div className="flex">
+                  {todoItem.completed_status === "NO" && <Button text icon="pi pi-pencil" onClick={() => router.push(`/task/${todoItem.id}`)} />}
+                  <Button text icon="pi pi-trash" onClick={() => deleteRowHandler(todoItem)} />
+                </div>
+
 
               </div>
             ))}

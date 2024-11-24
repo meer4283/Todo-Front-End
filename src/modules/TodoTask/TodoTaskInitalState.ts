@@ -3,7 +3,7 @@ export const TodoTaskInitalState = {
     loading: false,
     submitting: false,
     httpRequest: false,
-    list: [],
+    list: null,
     isInitialTableDataLoaded:false,
     todoTask: null,
     filter: "",
