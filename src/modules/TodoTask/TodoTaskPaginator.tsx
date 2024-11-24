@@ -7,7 +7,7 @@ import { useTodoTaskHook } from "./TodoTaskHook";
 const TodoTaskPaginator = () => {
   const [paginatorFirst, setPaginatorFirst] = useState<number>(0);
   const {
-    getPaginatedTodoTaskList,
+    getTodoTaskList,
     updateTodoTaskPaginated,
     TodoTaskFilter,
     TodoTaskPage,
@@ -26,7 +26,7 @@ const TodoTaskPaginator = () => {
   };
 
   useEffect(() => {
-    getPaginatedTodoTaskList();
+    getTodoTaskList();
   }, [TodoTaskPerPage, TodoTaskFilter, TodoTaskPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const paginatorTemplate: any = {

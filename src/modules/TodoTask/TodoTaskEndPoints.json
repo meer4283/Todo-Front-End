@@ -1,7 +1,7 @@
 {
     "addTodoTask": "/tasks/",
     "updateTodoTask": "/tasks/",
-    "getPaginatedTodoTaskList": "/tasks/list/paginated",
+    "getTodoTaskList": "/tasks",
     "deleteTodoTask": "/tasks/",
     "getTodoTaskById": "/tasks/",
     "getSelectedTodoTaskById": "/tasks/"

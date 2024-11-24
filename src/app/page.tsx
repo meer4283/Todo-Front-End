@@ -1,16 +1,24 @@
 "use client"
+import { TodoTaskList, useTodoTaskHook } from '@/modules/TodoTask';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button'
 import { Divider } from 'primereact/divider'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const Page = () => {
     const router = useRouter();
+    const { getTodoTaskList, getTodoTaskListFromStore } = useTodoTaskHook();
+
+    useEffect(() => {
+        getTodoTaskList();
+    }, [])
+
+
     return (
         <>
             {/* Header */}
             <div className="w-full add-container pb-5">
-                <Button onClick={()=> router.push("/add-task")} className=" text-center w-full text-white  rounded-lg flex align-items-center justify-center">
+                <Button onClick={() => router.push("/add-task")} className=" text-center w-full text-white  rounded-lg flex align-items-center justify-center">
                     Create Task <span className="ml-2">+</span>
                 </Button>
             </div>
@@ -27,14 +35,22 @@ const Page = () => {
                 </div>
             </div>
             <Divider />
+
             {/* Empty State */}
-            <div className="flex flex-column align-items-center text-center pt-8">
-                <div className="mb-4">
-                    <i className="pi pi-file text-gray-500 text-6xl"></i>
+            {getTodoTaskListFromStore?.length > 0 ?
+                <TodoTaskList />
+                :
+                <div className="flex flex-column align-items-center text-center pt-8">
+                    <div className="mb-4">
+                        <i className="pi pi-file text-gray-500 text-6xl"></i>
+                    </div>
+                    <p className="text-gray-400">You don't have any tasks registered yet.</p>
+                    <p className="text-gray-500">Create tasks and organize your to-do items.</p>
                 </div>
-                <p className="text-gray-400">You don't have any tasks registered yet.</p>
-                <p className="text-gray-500">Create tasks and organize your to-do items.</p>
-            </div>
+            }
+
+
+
         </>
 
 

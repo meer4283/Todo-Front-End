@@ -73,7 +73,7 @@ const TodoTaskReducer = (state: any = TodoTaskInitalState.TodoTask, action: any)
       {
         const Data = state.list.filter(
           (listItem: any) =>
-            listItem.todo_task_id !== action.payLoad.todo_task_id
+            listItem.id !== action.payLoad.id
         );
         return { ...state, list: [...Data], total_records: action.total_records };
       }

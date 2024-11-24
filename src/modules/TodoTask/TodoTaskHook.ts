@@ -3,7 +3,7 @@ import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import {
   addTodoTaskAction,
   updateTodoTaskAction,
-  getPaginatedTodoTaskListAction,
+  getTodoTaskListAction,
   updateTodoTaskPaginationAction,
   updateTodoTaskPaginationFilterAction,
   deleteTodoTaskAction,
@@ -16,7 +16,7 @@ import { Dispatch } from "redux";
 import { default as EndPoints } from "./TodoTaskEndPoints.json";
 
 const useTodoTaskHook = (props?: any) => {
-  const getPaginatedTodoTaskListFromStore = useSelector(
+  const getTodoTaskListFromStore = useSelector(
     (state: any) => state.TodoTaskReducer.list,
     shallowEqual
   );
@@ -97,9 +97,9 @@ const useTodoTaskHook = (props?: any) => {
       ),
     [dispatch]
   );
-  const getPaginatedTodoTaskList = React.useCallback(
+  const getTodoTaskList = React.useCallback(
     () =>
-      dispatch(getPaginatedTodoTaskListAction(EndPoints.getPaginatedTodoTaskList)),
+      dispatch(getTodoTaskListAction(EndPoints.getTodoTaskList)),
     [dispatch]
   );
 
@@ -133,7 +133,7 @@ const useTodoTaskHook = (props?: any) => {
 
   return {
     TodoTaskList,
-    getPaginatedTodoTaskListFromStore,
+    getTodoTaskListFromStore,
     TodoTaskLoading,
     TodoTaskSubmit,
     TodoTaskHTTPRequest,
@@ -144,7 +144,7 @@ const useTodoTaskHook = (props?: any) => {
     TodoTaskTotalRecords,
     TodoTaskIsAdded,
     TodoTaskIsCreated,
-    getPaginatedTodoTaskList,
+    getTodoTaskList,
     saveForm,
     updateForm,
     updateTodoTaskPaginated,

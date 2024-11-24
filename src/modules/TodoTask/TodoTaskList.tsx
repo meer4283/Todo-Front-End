@@ -3,18 +3,20 @@ import { Column } from "primereact/column";
 import moment from "moment";
 import { Button } from "primereact/button";
 import { useTodoTaskHook } from "./TodoTaskHook";
-import { confirmDialog } from "primereact/confirmdialog";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Sidebar } from "primereact/sidebar";
 import React, { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Dialog } from "primereact/dialog";
 import { DataTableSkeleton } from "@/component/Skeleton/DataTableSkeleton";
+import { RadioButton } from "primereact/radiobutton";
 
 
 export const TodoTaskList = (props: any) => {
-  const { items, loading, } = props;
 
-  const { deleteForm, clearTodoTaskDataHook, TodoTaskLoading, TodoTaskSubmit, } = useTodoTaskHook();
+  const { deleteForm, clearTodoTaskDataHook, TodoTaskLoading, TodoTaskSubmit, getTodoTaskListFromStore, updateForm } = useTodoTaskHook();
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showTodoTaskItemViewSidebar, setShowTodoTaskItemViewSidebar] = useState<boolean>(
     false
@@ -22,7 +24,13 @@ export const TodoTaskList = (props: any) => {
 
   const [todoTaskId, setTodoTaskId] = useState<any>();
   const { t, i18n } = useTranslation();
+  const markComplete = (index: number, todoItem:TodoItem) => {
+    updateForm(todoItem.id, {...todoItem, completed_status: "YES", completed_at:moment().format()}, ()=>{}, false, ()=>{})
+  };
 
+  const handleDelete = (index: number) => {
+    console.log(`Deleted item at index: ${index}`);
+  };
   const deleteRowHandler = (row: any) => {
     confirmDialog({
       message: t('Do you want to delete this record?'),
@@ -44,7 +52,7 @@ export const TodoTaskList = (props: any) => {
           type="button"
           className="p-button-info "
           onClick={() => {
-            setTodoTaskId(row?.todo_task_id);
+            setTodoTaskId(row?.id);
             setShowTodoTaskItemViewSidebar(true);
           }}
           icon="pi pi-pencil"
@@ -55,7 +63,7 @@ export const TodoTaskList = (props: any) => {
           type="button"
           className="p-button-info "
           onClick={() => {
-            setTodoTaskId(row?.todo_task_id);
+            setTodoTaskId(row?.id);
             setShowModal(true);
           }}
           icon="pi pi-eye"
@@ -73,60 +81,52 @@ export const TodoTaskList = (props: any) => {
   };
   return (
     <>
+    <ConfirmDialog />
+      <div className="w-full block">
+        {!TodoTaskLoading ? (
+          <>
+            {getTodoTaskListFromStore.map((todoItem: TodoItem, index: number) => (
+              <div
+                key={index}
+                className={`flex items-center justify-between p-4 mb-3 rounded-lg border ${todoItem.completed_status === "YES"
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-gray-900 border-gray-800"
+                  }`}
+              >
+                {/* Radio Button & Text */}
+                <div className="flex items-center">
+                  {todoItem.completed_status !== "YES" ?
+                    <Button size="large"  text icon="pi pi-circle" className="p-0" onClick={()=>{ markComplete(index, todoItem)}} />
+                    :
+                    <Button size="large" text icon="pi pi-check-circle" className="p-0" />
+                  }
+                  <label
+                    htmlFor={`todoItem-${index}`}
+                    className={`ml-3 text-sm ${todoItem.completed_status === "YES"
+                      ? "text-gray-400 line-through"
+                      : "text-gray-300"
+                      }`}
+                  >
+                    {todoItem.title}
+                  </label>
+                </div>
 
-      <div>
-        <div>
+                {/* Delete Icon */}
+                <Button text icon="pi pi-trash" onClick={()=> deleteRowHandler(todoItem)} />
 
+              </div>
+            ))}
 
-
-
-          {!loading ? (
-            <DataTable value={items} scrollable scrollHeight="calc(100vh - 350px)"
-            >
-              <Column
-                style={{ width: "10%" }}
-                field="todo_task_id"
-                header={t('ID')}
-                sortable
-              ></Column>
-
-              <Column
-                style={{ width: "10%" }}
-                field="created_at"
-                header={t('Created')}
-                body={(row) => (
-                  <>{moment(row?.created_at).format("Do MMM YYYY HH:mm")}</>
-                )}
-                sortable
-              ></Column>
-
-              <Column
-                style={{ width: "10%" }}
-                field="todo_task_title"
-                header={t('Todo Task Title')}
-                className="font-bold"
-
-              ></Column>
-
-
-
-              <Column
-                style={{ width: "10%" }}
-                headerStyle={{ textAlign: "center" }}
-                bodyStyle={{ textAlign: "left", overflow: "visible" }}
-                body={(e) => actionBodyTemplate(e)}
-              />
-            </DataTable>
-          ) : (
-            <DataTableSkeleton
-              noOfRows={15}
-              columns={[
-                { field: "todo_task_id", header: "ID" },
-                { field: "created_at", header: t('Created') },
-              ]}
-            />
-          )}
-        </div>
+          </>
+        ) : (
+          <DataTableSkeleton
+            noOfRows={15}
+            columns={[
+              { field: "id", header: "ID" },
+              { field: "created_at", header: t('Created') },
+            ]}
+          />
+        )}
       </div>
     </>
   );

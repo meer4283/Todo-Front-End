@@ -111,13 +111,13 @@ export function updateTodoTaskAction(
     const { TodoTaskReducer } = getState();
     const { list } = TodoTaskReducer;
     const listIndex = findIndex(list, function (listItem: any) {
-      return listItem.todo_task_id === modelId;
+      return listItem.id === modelId;
     });
     dispatch(TodoTaskSubmit());
     const db = new useHttp();
     db.put(`${url}${modelId}`, formData)
       .then((res: any) => {
-        const { record } = res.data;
+        const record = res.data;
 
         if (res.status === 200) {
           resetForm();
@@ -193,7 +193,7 @@ export function deleteTodoTaskAction(url: string, data: any) {
 
     dispatch(TodoTaskLoading());
     const db = new useHttp();
-    db.delete(`${url}${data.todo_task_id}`)
+    db.delete(`${url}${data.id}`)
       .then((res: any) => {
         if (res.status === 200) {
           const action: any = {
@@ -233,28 +233,25 @@ export function deleteTodoTaskAction(url: string, data: any) {
   };
 }
 
-export function getPaginatedTodoTaskListAction(URL: string) {
+export function getTodoTaskListAction(URL: string) {
   return (dispatch: DispatchType, getState: any) => {
     const { TodoTaskReducer } = getState();
-    const { page, per_page, filter, sort } = TodoTaskReducer;
     if (TodoTaskReducer.loading === true) return false;
     dispatch(TodoTaskLoading());
     const db = new useHttp();
 
     db.get(
-      URL + `?page=${page}&per_page=${per_page}&filter=${filter}&sort=${sort}`
+      URL 
     )
       .then((result: any) => {
-        const files = result.data.data;
-        if (files?.length > 0) {
-          const response: any = result.data;
-          const { data, total } = response;
+        const list = result.data;
+        if (list?.length > 0) {
           const action: any = {
             type: TODO_TASK_GET_PAGINATED_LIST,
             payLoad: {
-              list: data,
-              count: data.length,
-              total_records: total,
+              list: list,
+              count: list.length,
+              total_records: list.length,
             },
           };
           dispatch(action);
