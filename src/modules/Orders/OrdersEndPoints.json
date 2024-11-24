@@ -1,0 +1,8 @@
+{
+    "addOrders": "/orders/",
+    "updateOrders": "/orders/",
+    "getPaginatedOrdersList": "/orders/list/paginated",
+    "deleteOrders": "/orders/",
+    "getOrdersById": "/orders/",
+    "getSelectedOrdersById": "/orders/"
+}

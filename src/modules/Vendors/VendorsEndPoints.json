@@ -1,0 +1,8 @@
+{
+    "addVendors": "/vendor/",
+    "updateVendors": "/vendor/",
+    "getPaginatedVendorsList": "/vendor/list/paginated",
+    "deleteVendors": "/vendor/",
+    "getVendorsById": "/vendor/",
+    "getSelectedVendorsById": "/vendor/"
+}
